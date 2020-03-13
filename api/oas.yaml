@@ -1,0 +1,215 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Interneto technologjų testo laikymo API
+servers:
+  - url: https://test.eyo.lt/api
+paths:
+  /tests:
+    post:
+      tags: ["tests"]
+      description: "Create new test"
+      requestBody:
+        description: Test details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestToCreate'
+      responses:
+        '200':
+          description: Test details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CeatedTest'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalError'
+  /tests/{id}:
+    patch:
+      tags: ["tests"]
+      description: "Start test"
+      parameters: 
+        - name: "status"
+          in: "query"
+          description: "Slot status"
+          required: true
+          schema:
+            $ref: '#/components/schemas/SlotStatus'
+      responses:
+        '200':
+          description: List of slots
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slots'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientError'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InernalError'
+    get:
+      tags: ["tests"]
+      description: "Get test details"
+      parameters: 
+        - name: "status"
+          in: "query"
+          description: "Slot status"
+          required: true
+          schema:
+            $ref: '#/components/schemas/SlotStatus'
+      responses:
+        '200':
+          description: List of slots
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Slots'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientError'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InernalError'
+  /tests/{testId}/students/{studentId}/questions:
+    get:
+      tags: ["tests students questions"]
+      description: "List test questions for individual stundent"
+      parameters: 
+        - name: "id"
+          in: "path"
+          description: "Slot ID"
+          required: true
+          schema:
+            type: string
+            example: 507f191e810c19729de860ea
+      responses:
+        '200':
+          description: Booked slot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservedSlot'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientError'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InernalError'
+  /tests/{testId}/students/{studentId}/questions/{questionId}/answers:
+    post:
+      tags: ["tests students questions answers"]
+      description: "Submit test question answer"
+      parameters: 
+        - name: "id"
+          in: "path"
+          description: "Slot ID"
+          required: true
+          schema:
+            type: string
+            example: 507f191e810c19729de860ea
+      responses:
+        '200':
+          description: Booked slot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservedSlot'
+        '400':
+          description: Client error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientError'
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InernalError'
+components:
+  schemas:
+    TestToCreate:
+      type: object
+    CeatedTest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234
+        timer:
+          type: number
+          example: 480
+    Email:
+      type: string
+      format: email
+      example: vardas.pavarde@stud.vgtu.lt
+    SlotStatus:
+      type: string
+      enum: [RESERVED, BOOKED]
+    Slot:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        status:
+          $ref: '#/components/schemas/SlotStatus'
+    Slots:
+      type: array
+      items:
+        $ref: '#/components/schemas/Slot'
+    SlotToReserve:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time          
+        email:
+          $ref: '#/components/schemas/Email'
+    ReservedSlot:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        email:
+          type: string
+          format: email
+          $ref: '#/components/schemas/Email'
+        status:
+          $ref: '#/components/schemas/SlotStatus'
+        timestamp:
+          type: string
+          format: date-time
+    ClientError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: '"status" must be one of [array, RESERVED, BOOKED]'
+    InternalError:
+      type: object
