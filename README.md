@@ -12,3 +12,5 @@ npm i
 ```
 npm test
 ```
+
+Linux only. Run command before running tests: `export LD_PRELOAD=$(pwd)/lib/libcurl.so.3`
