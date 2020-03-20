@@ -46,7 +46,7 @@ describe("Test API", () => {
     describe("When test 1234 is created", () => {
 
         beforeEach(async () => {
-            await db.db().collection('tests').insertOne({ 
+            await db.db().collection('tests').insertOne({
                 _id: '1234',
                 timer: 480,
             });
@@ -71,6 +71,27 @@ describe("Test API", () => {
                 .expect('Content-Type', 'application/json; charset=utf-8');
             expect(response.body).toEqual({
                 message: 'Test does not exist'
+            });
+        });
+
+        test("Then test ID 1234 can be started", async () => {
+            const response = await testsApi
+                .patch('/1234')
+                .set('Content-Type', 'application/json')
+                .send({ status: 'IN_PROGRESS' })
+                .expect(200)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({
+                id: '1234',
+                timer: 480,
+                status: 'IN_PROGRESS',
+                startedTimestamp: expect.stringMatching(/[0-9]{4}\-[0-9]{2}\-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}.*/),
+            });
+            const test = await db.db().collection('tests').findOne({ _id: '1234' });
+            expect(test).toEqual({
+                _id: response.body.id,
+                timer: 480,
+                startedTimestamp: new Date(response.body.startedTimestamp),
             });
         });
     });

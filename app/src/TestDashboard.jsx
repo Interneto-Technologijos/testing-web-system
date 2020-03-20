@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
-import { create } from './testService';
+import { create, start } from './testService';
 
 export default () => {
   const [id, setId] = useState('');
   const [timer, setTimer] = useState(0);
   const [status, setStatus] = useState(null);
+
+  const startHandler = () => {
+    start(id)
+      .then(({ status }) => {
+        setStatus(status);
+      })
+      .catch(() => alert('Test start error'));
+  };
 
   useEffect(() => {
     create()
@@ -27,7 +35,7 @@ export default () => {
         <h2>{String(Math.floor(timer / 60)).padStart(2, '0') + ':' + String(timer % 60).padStart(2, '0')}</h2>
       </Col>
       <Col xs={12} style={{ textAlign: 'center' }}>
-        <button variant="primary" disabled={status != 'WAITING'}>Pradėti</button>
+        <button variant="primary" disabled={status != 'WAITING'} onClick={startHandler}>Pradėti</button>
       </Col>
     </Row>
   </Container>

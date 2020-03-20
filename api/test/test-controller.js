@@ -22,4 +22,16 @@ module.exports.init = app => {
             }
         }),
     );
+
+    app.patch(
+        '/api/tests/:id',
+        asyncHandler(async (req, res) => {
+            try {
+                const { _id, timer, status, startedTimestamp } = await testService.updateStatusById(req.params.id, req.body.status);
+                res.status(200).send({ id: _id, timer, status, startedTimestamp: startedTimestamp.toISOString() });
+            } catch (error) {
+                console.log(error);
+            }
+        }),
+    );
 };

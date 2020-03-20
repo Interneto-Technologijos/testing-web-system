@@ -34,19 +34,27 @@ paths:
       tags: ["tests"]
       description: "Start test"
       parameters: 
-        - name: "status"
-          in: "query"
-          description: "Slot status"
+        - name: "id"
+          in: "path"
+          description: "Test ID"
           required: true
           schema:
-            $ref: '#/components/schemas/SlotStatus'
+            type: string
+            example: 1234
+      requestBody:
+        description: Test updated params
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestToUpdate'
       responses:
         '200':
           description: List of slots
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Slots'
+                $ref: '#/components/schemas/CeatedTest'
         '400':
           description: Client error
           content:
@@ -63,19 +71,20 @@ paths:
       tags: ["tests"]
       description: "Get test details"
       parameters: 
-        - name: "status"
-          in: "query"
-          description: "Slot status"
+        - name: "id"
+          in: "path"
+          description: "Test ID"
           required: true
           schema:
-            $ref: '#/components/schemas/SlotStatus'
+            type: string
+            example: 1234
       responses:
         '200':
-          description: List of slots
+          description: Test details
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Slots'
+                $ref: '#/components/schemas/CeatedTest'
         '400':
           description: Client error
           content:
@@ -163,53 +172,20 @@ components:
         timer:
           type: number
           example: 480
-    Email:
-      type: string
-      format: email
-      example: vardas.pavarde@stud.vgtu.lt
-    SlotStatus:
-      type: string
-      enum: [RESERVED, BOOKED]
-    Slot:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
         status:
-          $ref: '#/components/schemas/SlotStatus'
-    Slots:
-      type: array
-      items:
-        $ref: '#/components/schemas/Slot'
-    SlotToReserve:
+          type: string
+          enum: [WAITING, IN_PROGRESS, COMPLETED]
+    TestToUpdate:
       type: object
       properties:
-        date:
-          type: string
-          format: date-time          
-        email:
-          $ref: '#/components/schemas/Email'
-    ReservedSlot:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date-time
-        email:
-          type: string
-          format: email
-          $ref: '#/components/schemas/Email'
         status:
-          $ref: '#/components/schemas/SlotStatus'
-        timestamp:
           type: string
-          format: date-time
+          enum: [WAITING, IN_PROGRESS, COMPLETED]
     ClientError:
       type: object
       properties:
         message:
           type: string
-          example: '"status" must be one of [array, RESERVED, BOOKED]'
+          example: 'Test with ID 1234 does not exist'
     InternalError:
       type: object

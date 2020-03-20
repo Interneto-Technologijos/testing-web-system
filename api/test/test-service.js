@@ -14,6 +14,20 @@ module.exports.createTest = async () => {
     return { ...test, status };
 };
 
+module.exports.updateStatusById = async (id, status) => {
+    // const test = await testRepository.findById(id);
+    
+    
+    // if (status !== 'WAITING') {
+    //     throw new Error('Test can not be started');
+    // }
+
+    const startedTimestamp = new Date();
+    const test = await testRepository.updateStartedTimestampById(id, startedTimestamp);
+    //const status = getStatus(test);
+    return { ...test, status };
+};
+
 module.exports.getTestById = async (id) => {
     const test = await testRepository.findById(id);
 
