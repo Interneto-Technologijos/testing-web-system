@@ -1,8 +1,26 @@
 const testRepository = require('./test-repository');
 
-module.exports.createTest = () => {
+const getStatus = test => {
+    if (!test.startedTimestamp) {
+        return 'WAITING';
+    }
+};
+
+module.exports.createTest = async () => {
     const id = (Math.round(Math.random() * 8999) + 1000).toString();
     const timer = 480;
-
-    return testRepository.save({ _id: id, timer });
+    const status = getStatus({ _id: id, timer });
+    const test = await testRepository.save({ _id: id, timer });
+    return { ...test, status };
 };
+
+module.exports.getTestById = async (id) => {
+    const test = await testRepository.findById(id);
+
+    if (!test) {
+        throw Error('Test does not exist');
+    }
+
+    const status = getStatus(test);
+    return { ...test, status };
+}

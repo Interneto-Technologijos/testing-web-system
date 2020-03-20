@@ -18,6 +18,10 @@ describe("Test API", () => {
         await db.close();
     });
 
+    beforeEach(async () => {
+        await db.db().collection('tests').deleteMany();
+    });
+
     describe("When I create new test", () => {
         test("Then test ID and timer is provided", async () => {
             const response = await testsApi
@@ -29,11 +33,44 @@ describe("Test API", () => {
             expect(response.body).toEqual({
                 id: expect.stringMatching(/[0-9]{4}/),
                 timer: 480,
+                status: 'WAITING',
             });
             const test = await db.db().collection('tests').findOne({ _id: response.body.id });
             expect(test).toEqual({
                 _id: response.body.id,
                 timer: 480,
+            });
+        });
+    });
+
+    describe("When test 1234 is created", () => {
+
+        beforeEach(async () => {
+            await db.db().collection('tests').insertOne({ 
+                _id: '1234',
+                timer: 480,
+            });
+        });
+
+        test("Then student can read test ID, timer and status", async () => {
+            const response = await testsApi
+                .get('/1234')
+                .expect(200)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({
+                id: '1234',
+                timer: 480,
+                status: 'WAITING',
+            });
+        });
+
+        test("Then student can not read test ID 1111", async () => {
+            const response = await testsApi
+                .get('/1111')
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({
+                message: 'Test does not exist'
             });
         });
     });
