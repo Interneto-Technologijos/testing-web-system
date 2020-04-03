@@ -4,6 +4,7 @@ const getStatus = test => {
     if (!test.startedTimestamp) {
         return 'WAITING';
     }
+    return 'IN_PROGRESS';
 };
 
 module.exports.createTest = async () => {

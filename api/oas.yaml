@@ -66,7 +66,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InernalError'
+                $ref: '#/components/schemas/InternalError'
     get:
       tags: ["tests"]
       description: "Get test details"
@@ -96,26 +96,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InernalError'
+                $ref: '#/components/schemas/InternalError'
   /tests/{testId}/students/{studentId}/questions:
     get:
       tags: ["tests students questions"]
       description: "List test questions for individual stundent"
       parameters: 
-        - name: "id"
+        - name: "testId"
           in: "path"
-          description: "Slot ID"
+          description: "Test ID"
           required: true
           schema:
             type: string
-            example: 507f191e810c19729de860ea
+            example: 1234
+        - name: "studentId"
+          in: "path"
+          description: "Student ID"
+          required: true
+          schema:
+            type: string
+            example: 20179999
       responses:
         '200':
           description: Booked slot
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReservedSlot'
+                $ref: '#/components/schemas/TestStudentQuestions'
         '400':
           description: Client error
           content:
@@ -127,26 +134,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InernalError'
+                $ref: '#/components/schemas/InternalError'
   /tests/{testId}/students/{studentId}/questions/{questionId}/answers:
     post:
       tags: ["tests students questions answers"]
       description: "Submit test question answer"
       parameters: 
-        - name: "id"
+        - name: "testId"
           in: "path"
-          description: "Slot ID"
+          description: "Test ID"
           required: true
           schema:
             type: string
-            example: 507f191e810c19729de860ea
+            example: 1234
+        - name: "studentId"
+          in: "path"
+          description: "Student ID"
+          required: true
+          schema:
+            type: string
+            example: 20179999
+        - name: "questionId"
+          in: "path"
+          description: "Question ID"
+          required: true
+          schema:
+            type: number
+            example: 1
       responses:
         '200':
           description: Booked slot
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReservedSlot'
+                $ref: '#/components/schemas/TestStudentQuestionAnswer'
         '400':
           description: Client error
           content:
@@ -158,7 +179,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InernalError'
+                $ref: '#/components/schemas/InternalError'
 components:
   schemas:
     TestToCreate:
@@ -181,6 +202,26 @@ components:
         status:
           type: string
           enum: [WAITING, IN_PROGRESS, COMPLETED]
+    TestStudentQuestions:
+      type: array
+      items:
+        $ref: '#/components/schemas/TestStudentQuestion'
+    TestStudentQuestion:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        question:
+          type: string
+          example: 'Kuris is siu metodu nera HTTP metodas?'
+        options:
+          type: array
+          items:
+            type: string
+            example: 'REMOVE'
+    TestStudentQuestionAnswer:
+      type: object
     ClientError:
       type: object
       properties:

@@ -95,4 +95,27 @@ describe("Test API", () => {
             });
         });
     });
+
+    describe("When test 1234 is started", () => {
+
+        beforeEach(async () => {
+            await db.db().collection('tests').insertOne({
+                _id: '1234',
+                timer: 480,
+                startedTimestamp: new Date(),
+            });
+        });
+
+        test("Then student can read test ID, timer and status", async () => {
+            const response = await testsApi
+                .get('/1234')
+                .expect(200)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({
+                id: '1234',
+                timer: 480,
+                status: 'IN_PROGRESS',
+            });
+        });
+    });
 });

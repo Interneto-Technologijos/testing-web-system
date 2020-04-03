@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
 
 import { create, start } from './testService';
 
@@ -10,8 +11,17 @@ export default () => {
 
   const startHandler = () => {
     start(id)
-      .then(({ status }) => {
+      .then(({ status, timer, startedTimestamp }) => {
         setStatus(status);
+        const intervalId = setInterval(() => {
+          const currentTimer = Math.round(timer - moment.duration(moment().diff(moment(startedTimestamp))).as('seconds'));
+          if (currentTimer > 0) {
+            setTimer(currentTimer);
+          } else {
+            setTimer(0);
+            clearInterval(intervalId);
+          }
+        }, 1000);
       })
       .catch(() => alert('Test start error'));
   };
