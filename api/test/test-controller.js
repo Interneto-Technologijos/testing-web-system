@@ -1,11 +1,25 @@
+const passport = require('passport');
+const { BasicStrategy } = require('passport-http');
+
 const asyncHandler = require('express-async-handler');
 const Joi = require('@hapi/joi');
 
 const testService = require('./test-service');
 
+passport.use(new BasicStrategy(
+    (userId, password, done) => {
+        console.log(userId, password)
+        if (userId !== 'admin' || password !== 'secret') {
+            return done(null, false);
+        }
+        return done(null, {});
+    }
+));
+
 module.exports.init = app => {
     app.post(
         '/api/tests',
+        passport.authenticate('basic', { session: false }),
         asyncHandler(async (_req, res) => {
             const { _id, timer, status } = await testService.createTest();
             res.status(200).send({ id: _id, timer, status });

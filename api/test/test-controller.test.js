@@ -22,11 +22,47 @@ describe("Test API", () => {
         await db.db().collection('tests').deleteMany();
     });
 
-    describe("When I create new test", () => {
-        test("Then test ID and timer is provided", async () => {
+    describe("When now tests exist", () => {
+        test("Then lecturer can not create new test when no credentials are provided", async () => {
+            await testsApi
+                .post('/')
+                .set('Content-Type', 'application/json')
+                .send({})
+                .expect(401);
+        });
+
+        test("Then lecturer can not create new test when invalid credentials are provided", async () => {
+            await testsApi
+                .post('/')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', 'Basic ' + (new Buffer('root:pass')).toString('base64'))
+                .send({})
+                .expect(401);
+        });
+
+        test("Then lecturer can not create new test when invalid password is provided", async () => {
+            await testsApi
+                .post('/')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', 'Basic ' + (new Buffer('admin:invalid')).toString('base64'))
+                .send({})
+                .expect(401);
+        });
+
+        test("Then lecturer can not create new test when invalid username is provided", async () => {
+            await testsApi
+                .post('/')
+                .set('Content-Type', 'application/json')
+                .set('Authorization', 'Basic ' + (new Buffer('invalid:secret')).toString('base64'))
+                .send({})
+                .expect(401);
+        });
+
+        test("Then lecturer can create new test when valid credentials are provided", async () => {
             const response = await testsApi
                 .post('/')
                 .set('Content-Type', 'application/json')
+                .set('Authorization', 'Basic ' + (new Buffer('admin:secret')).toString('base64'))
                 .send({})
                 .expect(200)
                 .expect('Content-Type', 'application/json; charset=utf-8');
