@@ -20,3 +20,7 @@ Linux only: Run command before running tests: `export LD_PRELOAD=$(pwd)/lib/libc
 ```
 npm run dev
 ```
+
+Open on browser:
+- https://localhost:3000 - lecturer view
+- https://localhost:3000/test/:id - student view
