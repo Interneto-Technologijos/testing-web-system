@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 import { readById } from './testService';
 import { getTestStudentQuestions } from './testStudentQuestionService';
+import { answer } from './testStudentQuestionAnswerService';
 
 export default ({ testId }) => {
   const [id, setId] = useState('');
@@ -31,9 +32,13 @@ export default ({ testId }) => {
   };
 
   const onOptionClicked = (questionIndex, optionIndex) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[questionIndex].selectedOptionIndex = optionIndex;
-    setQuestions(updatedQuestions);
+    return answer(testId, studentId, questionIndex + 1, optionIndex)
+      .then(() => {
+        const updatedQuestions = [...questions];
+        updatedQuestions[questionIndex].answerIndex = optionIndex;
+        setQuestions(updatedQuestions);
+      })
+      .catch(error => alert(error.message));
   };
 
   useEffect(() => {
@@ -64,12 +69,12 @@ export default ({ testId }) => {
         </Col>
       </Row>
     }
-    return questions.map(({ id, question, options, selectedOptionIndex }, questionIndex) => <Row>
+    return questions.map(({ id, question, options, answerIndex }, questionIndex) => <Row>
       <Col xs={12} style={{ textAlign: 'center' }}>
         {id}. {question}
       </Col>
       {options.map((option, optionIndex) => <Col xs={12} md={3} style={{ textAlign: 'center' }}>
-        <button variant="primary" onClick={() => onOptionClicked(questionIndex, optionIndex)} disabled={selectedOptionIndex === optionIndex}>
+        <button variant="primary" onClick={() => onOptionClicked(questionIndex, optionIndex)} disabled={answerIndex === optionIndex}>
           {option}
         </button>
       </Col>)}

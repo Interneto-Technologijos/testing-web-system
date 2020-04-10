@@ -7,6 +7,8 @@ const getStatus = test => {
     return 'IN_PROGRESS';
 };
 
+module.exports.getStatus = getStatus;
+
 module.exports.createTest = async () => {
     const id = (Math.round(Math.random() * 8999) + 1000).toString();
     const timer = 480;
@@ -16,16 +18,11 @@ module.exports.createTest = async () => {
 };
 
 module.exports.updateStatusById = async (id, status) => {
-    // const test = await testRepository.findById(id);
-    
-    
-    // if (status !== 'WAITING') {
-    //     throw new Error('Test can not be started');
-    // }
-
     const startedTimestamp = new Date();
     const test = await testRepository.updateStartedTimestampById(id, startedTimestamp);
-    //const status = getStatus(test);
+    if (!test) {
+        throw Error('Test does not exist');
+    }
     return { ...test, status };
 };
 

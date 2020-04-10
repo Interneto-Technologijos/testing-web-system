@@ -4,6 +4,7 @@
   "description": "VGTU Internet Tecnology student test system",
   "main": "index.js",
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
@@ -36,7 +37,7 @@
     "webpack-hot-middleware": "^2.24.0"
   },
   "scripts": {
-    "test": "jest",
+    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 jest",
     "watch-webpack": "webpack --watch --mode development",
     "watch-nodemon": "env MONGO_URL=mongodb://localhost nodemon --watch api api/index",
     "dev": "npm-run-all --parallel watch-webpack watch-nodemon"

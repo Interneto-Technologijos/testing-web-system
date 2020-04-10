@@ -118,7 +118,7 @@ paths:
             example: 20179999
       responses:
         '200':
-          description: Booked slot
+          description: Test Student Queestions
           content:
             application/json:
               schema:
@@ -161,13 +161,20 @@ paths:
           schema:
             type: number
             example: 1
+      requestBody:
+        description: Test Student Question Answer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestStudentQuestionAnswer'
       responses:
         '200':
-          description: Booked slot
+          description: Test Student Question Answer Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TestStudentQuestionAnswer'
+                $ref: '#/components/schemas/TestStudentQuestionAnswerResponse'
         '400':
           description: Client error
           content:
@@ -221,6 +228,12 @@ components:
             type: string
             example: 'REMOVE'
     TestStudentQuestionAnswer:
+      type: object
+      properties:
+        optionIndex:
+          type: number
+          example: 2
+    TestStudentQuestionAnswerResponse:
       type: object
     ClientError:
       type: object

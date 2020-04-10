@@ -3,10 +3,10 @@ const request = require('supertest');
 const app = require('../../../app');
 const db = require('../../../db');
 
-const PORT = 12345;
+const PORT = 12346;
 
 describe('Test Student Question API', () => {
-    const testsStudentsQuestionsApi = request(`http://localhost:${PORT}/api`);
+    const testsStudentsQuestionsApi = request(`https://localhost:${PORT}/api`);
 
     beforeAll(async () => {
         await app.listen(PORT);
@@ -53,6 +53,30 @@ describe('Test Student Question API', () => {
                     corectOption: 'EDIT',
                 }
             ]);
+        });
+
+        test('Then student ID 20179999 can not get his generated questions for test NOTEXISTS', async () => {
+            const response = await testsStudentsQuestionsApi
+                .get('/tests/NOTEXISTS/students/20179999/questions')
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual(
+                {
+                    message: '"testId" with value "NOTEXISTS" fails to match the required pattern: /^[0-9]{4}$/',
+                },
+            );
+        });
+
+        test('Then student ID NOTEXISTS can not get his generated questions', async () => {
+            const response = await testsStudentsQuestionsApi
+                .get('/tests/1234/students/NOTEXISTS/questions')
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual(
+                {
+                    message: '"studentId" with value "NOTEXISTS" fails to match the required pattern: /^[0-9]{8}$/',
+                },
+            );
         });
 
         test('Then student ID 20179999 can get his generated test questions', async () => {
@@ -110,6 +134,7 @@ describe('Test Student Question API', () => {
                             id: 2,
                             question: 'Kuris is siu metodu nera HTTP metodas?',
                             options: ['GET', 'POST', 'PUT', 'FIND'],
+                            answerIndex: 3,
                         }
                     ]
                 });
@@ -130,6 +155,7 @@ describe('Test Student Question API', () => {
                         id: 2,
                         question: 'Kuris is siu metodu nera HTTP metodas?',
                         options: ['GET', 'POST', 'PUT', 'FIND'],
+                        answerIndex: 3,
                     }
                 ]);
             });

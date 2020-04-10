@@ -6,7 +6,7 @@ const db = require('../db');
 const PORT = 12345;
 
 describe("Test API", () => {
-    const testsApi = request(`http://localhost:${PORT}/api/tests`);
+    const testsApi = request(`https://localhost:${PORT}/api/tests`);
 
     beforeAll(async () => {
         await app.listen(PORT);
@@ -52,6 +52,18 @@ describe("Test API", () => {
             });
         });
 
+        test('Then student can not read test ID NOTEXISTS', async () => {
+            const response = await testsApi
+                .get('/NOTEXISTS')
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual(
+                {
+                    message: '"id" with value "NOTEXISTS" fails to match the required pattern: /^[0-9]{4}$/',
+                },
+            );
+        });
+
         test("Then student can read test ID, timer and status", async () => {
             const response = await testsApi
                 .get('/1234')
@@ -72,6 +84,46 @@ describe("Test API", () => {
             expect(response.body).toEqual({
                 message: 'Test does not exist'
             });
+        });
+
+        test('Then lecturer can not change status for test ID NOTEXISTS', async () => {
+            const response = await testsApi
+                .patch('/NOTEXISTS')
+                .set('Content-Type', 'application/json')
+                .send({ status: 'IN_PROGRESS' })
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual(
+                {
+                    message: '"id" with value "NOTEXISTS" fails to match the required pattern: /^[0-9]{4}$/',
+                },
+            );
+        });
+
+        test('Then lecturer can not change status for not existing test ID 1111', async () => {
+            const response = await testsApi
+                .patch('/1111')
+                .set('Content-Type', 'application/json')
+                .send({ status: 'IN_PROGRESS' })
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({
+                message: 'Test does not exist'
+            });
+        });
+
+        test('Then lecturer can not change status to NOTEXISTS for test ID 1234', async () => {
+            const response = await testsApi
+                .patch('/1234')
+                .set('Content-Type', 'application/json')
+                .send({ status: 'NOTEXISTS' })
+                .expect(400)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual(
+                {
+                    message: '"status" must be one of [WAITING, IN_PROGRESS]',
+                },
+            );
         });
 
         test("Then test ID 1234 can be started", async () => {
