@@ -1,3 +1,4 @@
+const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
@@ -27,9 +28,13 @@ app.get('*', (_req, res) => {
 
 let server = null;
 
-module.exports.listen = port => new Promise(resolve => {
+module.exports.listen = (port, isHttps = false) => new Promise(resolve => {
     console.log(`Starting API server on port ${port}`);
-    server = http.createServer(app);
+    if (isHttps) {
+        server = https.createServer({ key: privateKey, cert: certificate }, app);
+    } else {
+        server = http.createServer(app);
+    }
     server.listen(port);
     resolve();
 });

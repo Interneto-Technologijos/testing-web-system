@@ -9,7 +9,7 @@ describe("Test API", () => {
     const testsApi = request(`https://localhost:${PORT}/api/tests`);
 
     beforeAll(async () => {
-        await app.listen(PORT);
+        await app.listen(PORT, true);
         await db.connect();
     });
 
