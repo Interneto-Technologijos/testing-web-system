@@ -10,4 +10,4 @@ module.exports.connect = async () => {
 
 module.exports.close = () => client.close();
 
-module.exports.db = () => client.db('test');
+module.exports.db = () => client.db(process.env.MONGO_DB || 'test');
