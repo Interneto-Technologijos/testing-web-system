@@ -29,7 +29,7 @@ let server = null;
 
 module.exports.listen = port => new Promise(resolve => {
     console.log(`Starting API server on port ${port}`);
-    server = https.createServer({ key: privateKey, cert: certificate }, app);
+    server = http.createServer(app);
     server.listen(port);
     resolve();
 });
