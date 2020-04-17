@@ -22,8 +22,9 @@ module.exports = {
       },
     ],
   },
-  // plugins: [new HtmlWebpackPlugin({
-  //   filename: 'index.html',
-  //   template: path.join('.', 'app', 'src', 'index.html'),
-  // })],
+  plugins: [new HtmlWebpackPlugin({
+    filename: 'index.html',
+    template: path.join('.', 'app', 'src', 'index.html'),
+    inject: false,
+  })],
 };

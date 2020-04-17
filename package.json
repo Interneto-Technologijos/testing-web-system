@@ -44,6 +44,7 @@
     "watch-webpack": "webpack --watch --mode development",
     "watch-nodemon": "env MONGO_URL=mongodb://localhost nodemon --watch api api/index",
     "dev": "npm-run-all --parallel watch-webpack watch-nodemon",
+    "postinstall": "webpack",
     "start": "node api/index"
   },
   "author": "Mykolas Molis",
