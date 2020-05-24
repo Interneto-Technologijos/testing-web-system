@@ -9,7 +9,7 @@ const testService = require('./test-service');
 passport.use(new BasicStrategy(
     (userId, password, done) => {
         console.log(userId, password)
-        if (userId !== 'admin' || password !== 'secret') {
+        if (userId !== 'admin' || password !== process.env.ADMIN_PASSWORD) {
             return done(null, false);
         }
         return done(null, {});

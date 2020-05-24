@@ -226,4 +226,64 @@ describe('Test Student Question Answer API', () => {
             });
         });
     });
+
+    describe('When test ID 1234 exists, is started 7 minutes ago and student ID 20179999 questions are generated', () => {
+
+        beforeEach(async () => {
+            await db.db().collection('tests').insertOne({
+                _id: '1234',
+                timer: 480,
+                startedTimestamp: new Date(),
+            });
+            await db.db().collection('test-student-questions').insertOne({
+                testId: '1234',
+                studentId: '20179999',
+                questions: [
+                    {
+                        id: 1,
+                        questionId: 444,
+                        question: 'Kuris is siu metodu nera HTTP metodas?',
+                        options: ['GET', 'POST', 'DELETE', 'REMOVE'],
+                    },
+                    {
+                        id: 2,
+                        questionId: 333,
+                        question: 'Kuris is siu metodu nera HTTP metodas?',
+                        options: ['GET', 'POST', 'DELETE', 'FIND'],
+                    }
+                ]
+            });
+        });
+
+        test('Then student ID 20179999 can answer question ID 1 with anwer index 2', async () => {
+            const response = await testsStudentsQuestionsApi
+                .post('/tests/1234/students/20179999/questions/1/answers')
+                .set('Content-Type', 'application/json')
+                .send({ answerIndex: 2 })
+                .expect(200)
+                .expect('Content-Type', 'application/json; charset=utf-8');
+            expect(response.body).toEqual({});
+            const testStudentQuestions = await db.db().collection('test-student-questions').findOne({ testId: '1234', studentId: '20179999' });
+            expect(testStudentQuestions).toEqual({
+                _id: expect.anything(),
+                testId: '1234',
+                studentId: '20179999',
+                questions: [
+                    {
+                        id: 1,
+                        questionId: expect.anything(),
+                        question: expect.stringMatching(/^.{10,}\?$/),
+                        options: expect.anything(),
+                        answerIndex: 2,
+                    },
+                    {
+                        id: 2,
+                        questionId: expect.anything(),
+                        question: expect.stringMatching(/^.{10,}\?$/),
+                        options: expect.anything(),
+                    }
+                ]
+            });
+        });
+    });
 });

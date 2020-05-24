@@ -41,6 +41,7 @@ describe("Test API", () => {
         });
 
         test("Then lecturer can not create new test when invalid password is provided", async () => {
+            process.env.ADMIN_PASSWORD = 'valid';
             await testsApi
                 .post('/')
                 .set('Content-Type', 'application/json')
@@ -50,6 +51,7 @@ describe("Test API", () => {
         });
 
         test("Then lecturer can not create new test when invalid username is provided", async () => {
+            process.env.ADMIN_PASSWORD = 'secret';
             await testsApi
                 .post('/')
                 .set('Content-Type', 'application/json')
@@ -59,6 +61,7 @@ describe("Test API", () => {
         });
 
         test("Then lecturer can create new test when valid credentials are provided", async () => {
+            process.env.ADMIN_PASSWORD = 'secret';
             const response = await testsApi
                 .post('/')
                 .set('Content-Type', 'application/json')

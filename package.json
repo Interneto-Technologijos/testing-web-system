@@ -6,6 +6,7 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "moment": "^2.24.0",
@@ -44,8 +45,10 @@
     "watch-webpack": "webpack --watch --mode development",
     "watch-nodemon": "env MONGO_URL=mongodb://localhost nodemon --watch api api/index",
     "dev": "npm-run-all --parallel watch-webpack watch-nodemon",
-    "postinstall": "webpack",
-    "start": "node api/index"
+    "webpack": "webpack",
+    "start": "node api/index",
+    "undeploy": "docker -H ssh://mykolas@eyo.lt stop testing-web-system && docker -H ssh://mykolas@eyo.lt rm testing-web-system",
+    "deploy": "docker -H ssh://mykolas@eyo.lt build -t testing-web-system . && docker -H ssh://mykolas@eyo.lt run -d --name=testing-web-system --network=eyo_default --expose=3000 testing-web-system"
   },
   "author": "Mykolas Molis",
   "license": "ISC",
