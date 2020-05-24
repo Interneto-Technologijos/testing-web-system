@@ -1,4 +1,5 @@
 const request = require('supertest');
+const moment = require('moment');
 
 const app = require('../../../../app');
 const db = require('../../../../db');
@@ -227,13 +228,13 @@ describe('Test Student Question Answer API', () => {
         });
     });
 
-    describe('When test ID 1234 exists, is started 7 minutes ago and student ID 20179999 questions are generated', () => {
+    describe('When test ID 1234 exists, is started 9 minutes ago and student ID 20179999 questions are generated', () => {
 
         beforeEach(async () => {
             await db.db().collection('tests').insertOne({
                 _id: '1234',
                 timer: 480,
-                startedTimestamp: new Date(),
+                startedTimestamp: moment().subtract(6, 'minutes').toDate(),
             });
             await db.db().collection('test-student-questions').insertOne({
                 testId: '1234',

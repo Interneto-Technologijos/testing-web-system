@@ -70,10 +70,10 @@ export default ({ testId }) => {
       </Row>
     }
     return questions.map(({ id, question, options, answerIndex }, questionIndex) => <Row>
-      <Col xs={12} style={{ textAlign: 'center' }}>
+      <Col xs={12} style={{ textAlign: 'center', paddingTop: 60 }}>
         {id}. {question}
       </Col>
-      {options.map((option, optionIndex) => <Col xs={12} md={3} style={{ textAlign: 'center' }}>
+      {options.map((option, optionIndex) => <Col xs={12} md={3} style={{ textAlign: 'center', paddingTop: 10 }}>
         <button variant="primary" onClick={() => onOptionClicked(questionIndex, optionIndex)} disabled={answerIndex === optionIndex}>
           {option}
         </button>

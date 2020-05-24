@@ -40,6 +40,7 @@ export default () => {
     <Row>
       <Col xs={12} style={{ textAlign: 'center' }}>
         <h1>Testas Nr. {id}</h1>
+        <h3>{window.location.href}/test/{id}</h3>
       </Col>
       <Col xs={12} style={{ textAlign: 'center' }}>
         <h2>{String(Math.floor(timer / 60)).padStart(2, '0') + ':' + String(timer % 60).padStart(2, '0')}</h2>
