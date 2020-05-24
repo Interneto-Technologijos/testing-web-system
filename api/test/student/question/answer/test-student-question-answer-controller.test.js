@@ -234,7 +234,7 @@ describe('Test Student Question Answer API', () => {
             await db.db().collection('tests').insertOne({
                 _id: '1234',
                 timer: 480,
-                startedTimestamp: moment().subtract(6, 'minutes').toDate(),
+                startedTimestamp: moment().subtract(9, 'minutes').toDate(),
             });
             await db.db().collection('test-student-questions').insertOne({
                 testId: '1234',
@@ -256,35 +256,18 @@ describe('Test Student Question Answer API', () => {
             });
         });
 
-        test('Then student ID 20179999 can answer question ID 1 with anwer index 2', async () => {
+        test('Then student ID 20179999 can not answer question ID 1 with anwer index 2', async () => {
             const response = await testsStudentsQuestionsApi
                 .post('/tests/1234/students/20179999/questions/1/answers')
                 .set('Content-Type', 'application/json')
                 .send({ answerIndex: 2 })
-                .expect(200)
+                .expect(400)
                 .expect('Content-Type', 'application/json; charset=utf-8');
-            expect(response.body).toEqual({});
-            const testStudentQuestions = await db.db().collection('test-student-questions').findOne({ testId: '1234', studentId: '20179999' });
-            expect(testStudentQuestions).toEqual({
-                _id: expect.anything(),
-                testId: '1234',
-                studentId: '20179999',
-                questions: [
-                    {
-                        id: 1,
-                        questionId: expect.anything(),
-                        question: expect.stringMatching(/^.{10,}\?$/),
-                        options: expect.anything(),
-                        answerIndex: 2,
-                    },
-                    {
-                        id: 2,
-                        questionId: expect.anything(),
-                        question: expect.stringMatching(/^.{10,}\?$/),
-                        options: expect.anything(),
-                    }
-                ]
-            });
+            expect(response.body).toEqual(
+                {
+                    message: 'Test ID 1234 is completed'
+                },
+            );
         });
     });
 });

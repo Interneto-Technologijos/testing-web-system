@@ -18,8 +18,12 @@ module.exports.answerTestIdStudentIdQuestionId = async (testId, studentId, quest
     if (!test) {
         throw new StudentQuestionAnswerError(`Test ID ${testId} does not exist`);
     }
-    if (testService.getStatus(test) !== 'IN_PROGRESS') {
+    const status = testService.getStatus(test);
+    if (status === 'WAITING') {
         throw new StudentQuestionAnswerError(`Test ID ${testId} is not started`);
+    }
+    if (status === 'COMPLETED') {
+        throw new StudentQuestionAnswerError(`Test ID ${testId} is completed`);
     }
     const questions = await testStudentQuestionRepository.findByTestIdAndStudentId(testId, studentId);
     if (!questions) {

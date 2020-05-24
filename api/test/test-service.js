@@ -1,8 +1,13 @@
+const moment = require('moment');
+
 const testRepository = require('./test-repository');
 
 const getStatus = test => {
     if (!test.startedTimestamp) {
         return 'WAITING';
+    }
+    if (test.startedTimestamp.getTime() < moment().subtract(test.timer, 'seconds').valueOf()) {
+        return 'COMPLETED';
     }
     return 'IN_PROGRESS';
 };
@@ -18,7 +23,7 @@ module.exports.createTest = async () => {
 };
 
 module.exports.updateStatusById = async (id, status) => {
-    const startedTimestamp = new Date();
+    const startedTimestamp = moment().toDate();
     const test = await testRepository.updateStartedTimestampById(id, startedTimestamp);
     if (!test) {
         throw Error('Test does not exist');
