@@ -4,7 +4,7 @@ const testStudentQuestionRepository = require('./test-student-question-repositor
 const createTestStudentQuestions = async (testId, studentId) => ({
     testId,
     studentId,
-    questions: (await questionRepository.findRandom2()).map((question, index) => ({
+    questions: (await questionRepository.findRandom(20)).map((question, index) => ({
         id: index + 1,
         questionId: question._id,
         question: question.question,
