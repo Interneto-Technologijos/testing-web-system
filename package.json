@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "async": "^3.2.0",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -41,7 +42,7 @@
     "webpack-hot-middleware": "^2.24.0"
   },
   "scripts": {
-    "test": "NODE_TLS_REJECT_UNAUTHORIZED=0 jest",
+    "test": "jest",
     "watch-webpack": "webpack --watch --mode development",
     "watch-nodemon": "env MONGO_URL=mongodb://localhost nodemon --watch api api/index",
     "dev": "npm-run-all --parallel watch-webpack watch-nodemon",

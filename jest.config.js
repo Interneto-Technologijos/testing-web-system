@@ -1,4 +1,4 @@
 module.exports = {
-    preset: '@shelf/jest-mongodb',
-    collectCoverage: true,
+  preset: "@shelf/jest-mongodb",
+  collectCoverage: true,
 };
