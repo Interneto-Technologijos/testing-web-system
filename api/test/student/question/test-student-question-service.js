@@ -10,7 +10,7 @@ const createTestStudentQuestions = async (testId, studentId) => {
         question.incorrectOptions.splice(
           Math.floor(Math.random() * 4),
           0,
-          question.corectOption
+          question.correctOption
         );
         return {
           id: index + 1,
@@ -24,10 +24,11 @@ const createTestStudentQuestions = async (testId, studentId) => {
 };
 
 module.exports.getQuestionsByTestIdAndStudentId = async (testId, studentId) => {
-  const existingQuestions = await testStudentQuestionRepository.findByTestIdAndStudentId(
-    testId,
-    studentId
-  );
+  const existingQuestions =
+    await testStudentQuestionRepository.findByTestIdAndStudentId(
+      testId,
+      studentId
+    );
   if (existingQuestions) {
     return existingQuestions;
   }

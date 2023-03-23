@@ -37,22 +37,22 @@ describe("Test Student Question API", () => {
           {
             question: "Kuris is siu metodu nera HTTP metodas?",
             incorrectOptions: ["GET", "POST", "PUT"],
-            corectOption: "REMOVE",
+            correctOption: "REMOVE",
           },
           {
             question: "Kuris is siu metodu nera HTTP metodas?",
             incorrectOptions: ["GET", "POST", "PUT"],
-            corectOption: "FIND",
+            correctOption: "FIND",
           },
           {
             question: "Kuris is siu metodu nera HTTP metodas?",
             incorrectOptions: ["GET", "POST", "PUT"],
-            corectOption: "SAVE",
+            correctOption: "SAVE",
           },
           {
             question: "Kuris is siu metodu nera HTTP metodas?",
             incorrectOptions: ["GET", "POST", "PUT"],
-            corectOption: "EDIT",
+            correctOptions: "EDIT",
           },
         ]);
     });

@@ -21,10 +21,10 @@ module.exports.getResultsByTestId = async (testId) => {
           testStudentQuestion.questions,
           10,
           async (question) => {
-            const { corectOption } = await questionRepository.findById(
+            const { correctOption } = await questionRepository.findById(
               question.questionId
             );
-            return corectOption === question.options[question.answerIndex]
+            return correctOption === question.options[question.answerIndex]
               ? 0.1
               : 0;
           }

@@ -1,0 +1,17 @@
+version: "3"
+services:
+  testing-web-system:
+    restart: always
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - MONGO_URL=mongodb://mongo-db:27017
+      - ADMIN_PASSWORD=
+  mongo-db:
+    restart: always
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - /opt/testing-web-system/mongo-db:/data/db

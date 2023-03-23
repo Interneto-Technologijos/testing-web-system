@@ -47,11 +47,11 @@ describe("Test Result API", () => {
         .insertMany([
           {
             _id: ObjectId("604b119bb63e89ec953d76e0"),
-            corectOption: "REMOVE",
+            correctOption: "REMOVE",
           },
           {
             _id: ObjectId("604b119bb63e89ec953d76e1"),
-            corectOption: "FIND",
+            correctOption: "FIND",
           },
         ]);
       await db
