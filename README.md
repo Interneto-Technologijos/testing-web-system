@@ -24,5 +24,6 @@ npm run dev
 
 Open on browser:
 
-- https://localhost:3000 - lecturer view
-- https://localhost:3000/test/:id - student view
+- http://localhost:3000 - lecturer view
+- http://localhost:3000/test/:id - student view
+- http://localhost:3000/api/tests/:id/results - results
