@@ -48,8 +48,8 @@
     "dev": "npm-run-all --parallel watch-webpack watch-nodemon",
     "webpack": "webpack",
     "start": "node api/index",
-    "undeploy": "docker -H ssh://mykolas@eyo.lt stop testing-web-system && docker -H ssh://mykolas@eyo.lt rm testing-web-system",
-    "deploy": "docker -H ssh://mykolas@eyo.lt build -t testing-web-system . && docker -H ssh://mykolas@eyo.lt run -d --name=testing-web-system --network=eyo_default --expose=3000 testing-web-system"
+    "undeploy": "docker -H ssh://ec2-user@timbernerslee.eyo.lt stop testing-web-system && docker -H ssh://ec2-user@timbernerslee.eyo.lt rm testing-web-system",
+    "deploy": "docker -H ssh://ec2-user@timbernerslee.eyo.lt build -t testing-web-system . && docker -H ssh://ec2-user@timbernerslee.eyo.lt run --network my-network --restart always -d --name=testing-web-system -p 80:3000 testing-web-system"
   },
   "author": "Mykolas Molis",
   "license": "ISC",

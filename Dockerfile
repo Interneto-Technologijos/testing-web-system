@@ -2,13 +2,10 @@ FROM node:10-alpine
 
 WORKDIR /opt/testing-web-system
 
-ADD api /opt/testing-web-system/api/
-ADD app/src /opt/testing-web-system/app/src/
-ADD package.json /opt/testing-web-system/
-ADD webpack.config.js /opt/testing-web-system/
-RUN npm i
-RUN npm run webpack
-RUN npm i --production
+ADD node_modules node_modules/
+ADD api api/
+ADD app/dist app/dist/
+ADD .env .
 
 EXPOSE 3000
 
