@@ -35,5 +35,5 @@ module.exports.getResultsByTestId = async (testId) => {
         };
       }
     )
-  ).sort((r1, r2) => r1.studentId > r2.studentId);
+  ).sort((r1, r2) => (r1.studentId > r2.studentId ? 1 : -1));
 };
